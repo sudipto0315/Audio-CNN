@@ -1,0 +1,8 @@
+pandas
+torchaudio
+torch
+tqdm
+numpy
+tensorboard
+fastapi
+librosa

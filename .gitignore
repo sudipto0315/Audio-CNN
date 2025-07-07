@@ -1,0 +1,43 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*.swn
+
+# Editor directories and files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+audio-cnn-frontend/node_modules/
+audio-cnn-frontend/.next/
+audio-cnn-frontend/out/
+audio-cnn-frontend/.env*.local
+audio-cnn-frontend/*.tsbuildinfo
+audio-cnn-frontend/next-env.d.ts
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.env
+.env
+.modal*
