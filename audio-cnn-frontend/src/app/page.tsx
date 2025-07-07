@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useCallback } from "react";
 import ColorScale from "~/components/ColorScale";
 import FeatureMap from "~/components/FeatureMap";
@@ -10,7 +9,10 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Progress } from "~/components/ui/progress";
 import Waveform from "~/components/Waveform";
-let inference_url = process.env.NEXT_PUBLIC_MODAL_INFERENCE_URL || "";
+const inference_url: string = process.env.NEXT_PUBLIC_MODAL_INFERENCE_URL ?? "";
+if (!inference_url) {
+  throw new Error("NEXT_PUBLIC_MODAL_INFERENCE_URL is not defined in the environment variables.");
+}
 interface Prediction {
   class: string;
   confidence: number;
@@ -21,9 +23,7 @@ interface LayerData {
   values: number[][];
 }
 
-interface VisualizationData {
-  [layerName: string]: LayerData;
-}
+type VisualizationData = Record<string, LayerData>;
 
 interface WaveformData {
   values: number[];
@@ -92,7 +92,7 @@ const ESC50_EMOJI_MAP: Record<string, string> = {
 };
 
 const getEmojiForClass = (className: string): string => {
-  return ESC50_EMOJI_MAP[className] || "🔈";
+  return ESC50_EMOJI_MAP[className] ?? "🔈";
 };
 
 function splitLayers(visualization: VisualizationData) {
@@ -106,7 +106,7 @@ function splitLayers(visualization: VisualizationData) {
       const [parent] = name.split(".");
       if (parent === undefined) continue;
 
-      if (!internals[parent]) internals[parent] = [];
+      internals[parent] ??= [];
       internals[parent].push([name, data]);
     }
   }
@@ -152,7 +152,7 @@ export default function HomePage() {
           throw new Error(`API error ${response.statusText}`);
         }
 
-        const data: ApiResponse = await response.json();
+        const data = (await response.json()) as ApiResponse;
         setVizData(data);
       } catch (err) {
         setError(
@@ -202,7 +202,7 @@ export default function HomePage() {
         throw new Error(`API error ${inferenceResponse.statusText}`);
       }
 
-      const data: ApiResponse = await inferenceResponse.json();
+      const data = (await inferenceResponse.json()) as ApiResponse;
       setVizData(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unknown error occurred");
@@ -236,7 +236,7 @@ export default function HomePage() {
             CNN Audio Visualizer
           </h1>
           <p className="text-md mb-8 text-muted-foreground">
-            Upload a WAV file to see the model's predictions and feature maps
+            Upload a WAV file to see the model&apos;s predictions and feature maps.
           </p>
 
           <div className="flex flex-col items-center">
